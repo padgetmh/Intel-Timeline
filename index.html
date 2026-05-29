@@ -1,0 +1,940 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Intel Sustainability Timeline</title>
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+    }
+
+    :root{
+      --bg:#020817;
+      --card:#071126;
+      --text:#ffffff;
+      --accent:#00a6ff;
+      --border:rgba(255,255,255,0.08);
+      --glass:rgba(255,255,255,0.05);
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    body::-webkit-scrollbar{
+      width:10px;
+    }
+
+    body::-webkit-scrollbar-thumb{
+      background:var(--accent);
+      border-radius:20px;
+    }
+
+    #progress-bar{
+      position:fixed;
+      top:0;
+      left:0;
+      width:0%;
+      height:5px;
+      background:linear-gradient(to right,#00a6ff,#53d8ff);
+      z-index:99999;
+    }
+
+    .navbar{
+      position:fixed;
+      top:0;
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:1rem 4rem;
+      z-index:999;
+      backdrop-filter:blur(15px);
+      background:rgba(0,0,0,0.3);
+    }
+
+    .logo{
+      display:inline-flex;
+      align-items:center;
+      color:white;
+      text-decoration:none;
+    }
+
+    .logo img{
+      width:160px;
+      max-width:100%;
+      display:block;
+    }
+
+    .navbar ul{
+      display:flex;
+      gap:2rem;
+      list-style:none;
+    }
+
+    .navbar a{
+      text-decoration:none;
+      color:white;
+    }
+
+    .hero{
+      height:100vh;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      /* Static background image with gradient overlay */
+      background-image: 
+        linear-gradient(180deg, rgba(1,19,40,0.7), rgba(0,0,0,0.8)),
+        url('img/HERO BACKGROUND.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .hero::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(0,166,255,0.14), transparent 0.5px),
+        radial-gradient(circle at 82% 18%, rgba(0,166,255,0.10), transparent 0.5px),
+        linear-gradient(rgba(0,166,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,166,255,0.08) 1px, transparent 1px);
+      background-size: 20% 20%, 25% 25%, 96px 96px, 96px 96px;
+      opacity:0.45;
+      pointer-events:none;
+      z-index:2;
+    }
+
+    .hero-video{
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      /* Hide video since we're using a background image */
+      display:none;
+    }
+
+    .hero-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.75)), radial-gradient(circle at center, rgba(0,166,255,0.08), transparent 55%);
+      z-index:3;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:10;
+      width:90%;
+      max-width:1400px;
+    }
+
+    .intel-logo{
+      width:120px;
+      margin-bottom:2rem;
+      filter:brightness(0) invert(1);
+    }
+
+    .hero h1{
+      font-size:5rem;
+      line-height:1.05;
+      font-weight:800;
+      margin-bottom:1.5rem;
+      max-width:700px;
+    }
+
+    .hero h1 span{
+      color:var(--accent);
+    }
+
+    .hero p{
+      font-size:1.2rem;
+      line-height:1.8;
+      color:#d4dbe7;
+      max-width:600px;
+      margin-bottom:2rem;
+    }
+
+    .hero-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:16px 34px;
+      border-radius:50px;
+      text-decoration:none;
+      color:white;
+      background:linear-gradient(45deg,#006eff,#00b7ff);
+      font-weight:600;
+    }
+
+    .stats-section{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:2rem;
+      padding:5rem 5%;
+    }
+
+    .stat-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:2.5rem;
+      border-radius:25px;
+      text-align:center;
+    }
+
+    .counter{
+      font-size:4rem;
+      font-weight:800;
+      color:var(--accent);
+    }
+
+    .timeline-section{
+      padding:7rem 5%;
+    }
+
+    .section-header{
+      text-align:center;
+      margin-bottom:4rem;
+    }
+
+    .section-header h2{
+      font-size:4rem;
+      margin-bottom:1rem;
+    }
+
+    .timeline-container{
+      display:flex;
+      gap:2rem;
+      overflow-x:auto;
+      padding-bottom:2rem;
+    }
+
+    .timeline-card{
+      min-width:360px;
+      background:var(--card);
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+      position:relative;
+      /* Make cards interactive with smooth transitions */
+      transition:all 0.4s ease;
+      cursor:pointer;
+    }
+
+    /* Hover effect: lift the card and add glow */
+    .timeline-card:hover{
+      transform:translateY(-15px);
+      border-color:rgba(0,166,255,0.4);
+      box-shadow:0 20px 60px rgba(0,166,255,0.25);
+    }
+
+    .timeline-card img{
+      width:100%;
+      height:240px;
+      object-fit:cover;
+      /* Smooth zoom on hover */
+      transition:transform 0.4s ease;
+    }
+
+    /* Zoom image when card is hovered */
+    .timeline-card:hover img{
+      transform:scale(1.1);
+    }
+
+    .year-badge{
+      position:absolute;
+      margin:15px;
+      background:#00a6ff;
+      padding:8px 14px;
+      border-radius:30px;
+      font-weight:700;
+      /* Badge transitions for interactivity */
+      transition:all 0.4s ease;
+      z-index:10;
+    }
+
+    /* Badge glow on card hover */
+    .timeline-card:hover .year-badge{
+      box-shadow:0 0 20px rgba(0,166,255,0.6);
+      transform:scale(1.1);
+    }
+
+    .card-content{
+      padding:2rem;
+      /* Smooth transitions for content changes */
+      transition:all 0.4s ease;
+    }
+
+    .card-content h3{
+      margin-bottom:1rem;
+      /* Animate heading color on card hover */
+      transition:color 0.4s ease;
+    }
+
+    /* Highlight heading when card is hovered */
+    .timeline-card:hover .card-content h3{
+      color:var(--accent);
+    }
+
+    .card-content p{
+      color:#c8d3df;
+      line-height:1.8;
+      margin-bottom:1.5rem;
+      transition:color 0.4s ease;
+    }
+
+    /* Brighten text on card hover */
+    .timeline-card:hover .card-content p{
+      color:#ffffff;
+    }
+
+    .learn-more{
+      border:none;
+      padding:12px 22px;
+      border-radius:40px;
+      background:linear-gradient(45deg,#006eff,#00b7ff);
+      color:white;
+      cursor:pointer;
+      /* Smooth button transitions */
+      transition:all 0.3s ease;
+      font-weight:600;
+    }
+
+    /* Button hover effect: enlarge and add glow */
+    .learn-more:hover{
+      transform:scale(1.08);
+      box-shadow:0 8px 25px rgba(0,166,255,0.4);
+    }
+
+    /* Button active state: press effect */
+    .learn-more:active{
+      transform:scale(0.95);
+    }
+
+    /* 2040 FUTURE EFFECT */
+
+    .future-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .future-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+      linear-gradient(
+        120deg,
+        transparent 20%,
+        rgba(255,255,255,0.15) 40%,
+        transparent 60%
+      );
+      animation:futureScan 4s linear infinite;
+      z-index:2;
+      pointer-events:none;
+    }
+
+    .future-card::after{
+      content:"FUTURE NOT YET WRITTEN";
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(2,8,23,0.75);
+      color:#8fdcff;
+      font-size:1rem;
+      letter-spacing:4px;
+      font-weight:700;
+      opacity:0;
+      animation:futureFade 5s ease-in-out infinite;
+      z-index:3;
+      backdrop-filter:blur(4px);
+    }
+
+    .future-card img,
+    .future-card .card-content,
+    .future-card .year-badge{
+      animation:disappearFuture 5s ease-in-out infinite;
+    }
+
+    @keyframes disappearFuture{
+
+      0%{
+        opacity:1;
+        filter:blur(0px);
+      }
+
+      40%{
+        opacity:1;
+        filter:blur(0px);
+      }
+
+      60%{
+        opacity:0.15;
+        filter:blur(6px);
+      }
+
+      80%{
+        opacity:0;
+        filter:blur(12px);
+      }
+
+      100%{
+        opacity:1;
+        filter:blur(0px);
+      }
+
+    }
+
+    @keyframes futureFade{
+
+      0%{
+        opacity:0;
+      }
+
+      45%{
+        opacity:0;
+      }
+
+      65%{
+        opacity:1;
+      }
+
+      85%{
+        opacity:0.8;
+      }
+
+      100%{
+        opacity:0;
+      }
+
+    }
+
+    @keyframes futureScan{
+
+      0%{
+        transform:translateX(-120%);
+      }
+
+      100%{
+        transform:translateX(120%);
+      }
+
+    }
+
+    .goals-section{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:4rem;
+      align-items:center;
+      padding:8rem 5%;
+    }
+
+    .goal-text h2{
+      font-size:3.5rem;
+      margin-bottom:2rem;
+    }
+
+    .goal-text p{
+      line-height:1.9;
+      color:#cbd5e1;
+      margin-bottom:2rem;
+    }
+
+    .goal-text ul{
+      list-style:none;
+    }
+
+    .goal-text li{
+      margin-bottom:1rem;
+      padding:1rem;
+      border-left:4px solid var(--accent);
+      background:var(--glass);
+      border-radius:10px;
+    }
+
+    .goal-image img{
+      width:100%;
+      border-radius:30px;
+    }
+
+    .gallery-section{
+      padding:7rem 5%;
+    }
+
+    .gallery-section h2{
+      font-size:4rem;
+      margin-bottom:3rem;
+      text-align:center;
+    }
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.5rem;
+    }
+
+    .gallery-grid img{
+      width:100%;
+      height:300px;
+      object-fit:cover;
+      border-radius:25px;
+    }
+
+    footer{
+      padding:3rem;
+      text-align:center;
+      color:#9fb0c5;
+    }
+
+    @media(max-width:768px){
+
+      .navbar{
+        padding:1rem;
+      }
+
+      .navbar ul{
+        display:none;
+      }
+
+      .hero h1{
+        font-size:3rem;
+      }
+
+      .section-header h2,
+      .gallery-section h2,
+      .goal-text h2{
+        font-size:2.5rem;
+      }
+
+      .timeline-container{
+        flex-direction:column;
+      }
+
+      .timeline-card{
+        min-width:100%;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+
+  <nav class="navbar">
+
+    <a href="#" class="logo">
+      <img src="img/intel-header-logo.svg" alt="Intel Logo" class="nav-logo">
+    </a>
+
+    <ul>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#stats">Stats</a></li>
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="#gallery">Innovation</a></li>
+    </ul>
+
+  </nav>
+
+  <header class="hero">
+
+    <video autoplay muted loop playsinline class="hero-video">
+      <source
+        src="https://cdn.coverr.co/videos/coverr-data-center-1562843677313?download=1080p"
+        type="video/mp4"
+      >
+    </video>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+      <img
+        src="img/intel-header-logo.svg"
+        class="intel-logo"
+        alt="Intel Logo"
+      >
+
+      <h1>
+        Sustainability
+        <span>Through the Ages</span>
+      </h1>
+
+      <p>
+        Intel’s journey through innovation,
+        sustainability, and the future of technology.
+      </p>
+
+      <a href="#timeline" class="hero-btn">
+        Explore Timeline →
+      </a>
+
+    </div>
+
+  </header>
+
+  <section class="stats-section" id="stats">
+
+    <div class="stat-card">
+      <h2 class="counter">99%</h2>
+      <p>Renewable Electricity</p>
+    </div>
+
+    <div class="stat-card">
+      <h2 class="counter">2040</h2>
+      <p>Net-Zero Goal</p>
+    </div>
+
+    <div class="stat-card">
+      <h2 class="counter">55+</h2>
+      <p>Years of Innovation</p>
+    </div>
+
+    <div class="stat-card">
+      <h2 class="counter">30B</h2>
+      <p>Gallons Water Saved</p>
+    </div>
+
+  </section>
+
+  <section class="timeline-section" id="timeline">
+
+    <div class="section-header">
+
+      <h2>Intel Timeline</h2>
+
+      <p>
+        Milestones that shaped technology and sustainability.
+      </p>
+
+    </div>
+
+    <!-- TO EDIT IMAGES: Change the src URL in each img tag below, including the future card at 2040 -->
+    <div class="timeline-container">
+
+      <article class="timeline-card">
+
+        <div class="year-badge">1968</div>
+
+        <img
+          src="img/Intel Founded.png"
+          alt="Intel Founded"
+          data-image="1968"
+        >
+
+        <div class="card-content">
+
+          <h3>Intel Founded</h3>
+
+          <p>
+            Robert Noyce and Gordon Moore founded Intel Corporation.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">1971</div>
+
+        <img
+          src="img/First Microprocessor.png"
+          alt="First Microprocessor"
+          data-image="1971"
+        >
+
+        <div class="card-content">
+
+          <h3>First Microprocessor</h3>
+
+          <p>
+            Intel introduced the world’s first commercial microprocessor.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">1978</div>
+
+        <img 
+          src="img/8086 Processor.png"
+          alt="8086 Processor"
+          data-image="1978"
+        >
+
+        <div class="card-content">
+
+          <h3>8086 Processor</h3>
+
+          <p>
+            Intel launched the x86 architecture that powers modern computing.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">1985</div>
+
+        <img
+          src="img/386 Processor Era.png"
+          alt="386 Processor Era"
+          data-image="1985"
+        >
+
+        <div class="card-content">
+
+          <h3>386 Processor Era</h3>
+
+          <p>
+            Intel introduced the 386 processor, revolutionizing PC performance.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">1993</div>
+
+        <img
+          src="img/Pentium Launch.png"
+          alt="Pentium Launch"
+          data-image="1993"
+        >
+
+        <div class="card-content">
+
+          <h3>Pentium Launch</h3>
+
+          <p>
+            The Pentium processor became one of Intel’s most iconic innovations.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">2006</div>
+
+        <img
+          src="img/Energy Efficiency Focus.png"
+          alt="Energy Efficiency Focus"
+          data-image="2006"
+        >
+
+        <div class="card-content">
+
+          <h3>Energy Efficiency Focus</h3>
+
+          <p>
+            Intel accelerated efforts toward energy-efficient processors and greener manufacturing.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">2020</div>
+
+        <img
+          src="img/Rise Strategy.png"
+          alt="RISE Strategy"
+          data-image="2020"
+        >
+
+        <div class="card-content">
+
+          <h3>RISE Strategy</h3>
+
+          <p>
+            Intel expanded sustainability and environmental commitments worldwide.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card">
+
+        <div class="year-badge">2023</div>
+
+        <img
+          src="img/9615e040-812a-4d50-b7f8-79015300075f.png"
+          alt="99% Renewable Electricity"
+          data-image="2023"
+        >
+
+        <div class="card-content">
+
+          <h3>99% Renewable Electricity</h3>
+
+          <p>
+            Intel achieved 99% renewable electricity usage across global operations.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+      <article class="timeline-card future-card">
+
+        <div class="year-badge">2040</div>
+
+        <img
+          src="img/Net Zero Vision.png"
+          alt="2040 Net-Zero Vision"
+          data-image="2040"
+        >
+
+        <div class="card-content">
+
+          <h3>Net-Zero Vision</h3>
+
+          <p>
+            Intel aims to achieve net-zero greenhouse gas emissions globally by 2040.
+          </p>
+
+          <button class="learn-more">Learn More</button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+    <section class="goals-section" id="goals">
+
+    <div class="goal-text">
+
+      <h2>Our Commitment to a Better Future</h2>
+
+      <p>
+        Intel continues investing in renewable energy,
+        AI-powered sustainability, and climate innovation.
+      </p>
+
+      <ul>
+        <li>Achieve net-zero greenhouse gas emissions by 2040.</li>
+        <li>Expand renewable electricity usage globally.</li>
+        <li>Advance sustainable semiconductor manufacturing.</li>
+        <li>Reduce water consumption through conservation programs.</li>
+      </ul>
+
+    </div>
+
+    <div class="goal-image">
+      <img
+        src="img/Commitment to the future.png"
+        alt="Commitment to the future"
+      />
+    </div>
+
+  </section>
+
+  <!-- INNOVATION SECTION ADDED BACK -->    
+<section class="gallery-section" id="gallery">      
+<h2>Innovation Gallery</h2>      
+<div class="gallery-grid">        
+<img
+         
+src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 1"
+       
+>        
+<img
+         
+src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 2"
+       
+>        
+<img         
+src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 3"
+       
+>        
+<img         
+src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 4"
+       
+>        
+<img         
+src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 5"
+       
+>       
+<img         
+src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=1200&auto=format&fit=crop"         
+alt="Innovation 6"
+       
+>      
+</div>
+    
+</section>
+    
+<footer>
+     
+© 2025 Intel Sustainability Experience — Designed for Innovation & Future Technology.
+   
+</footer>
+  
+</body>
+ 
+</html>  
