@@ -133,9 +133,9 @@
     }
 
     .nav-dropdown{
-      position:fixed;
-      right:20px;
-      top:76px;
+      position:absolute;
+      right:1rem;
+      top:100%;
       background:var(--card);
       border:1px solid var(--border);
       padding:8px;
@@ -144,6 +144,7 @@
       min-width:220px;
       box-shadow:0 10px 30px rgba(0,0,0,0.6);
       display:none;
+      transform:translateY(8px);
     }
 
     .nav-dropdown.open{ display:block; }
@@ -162,7 +163,7 @@
     .nav-dropdown a:hover{ background:rgba(255,255,255,0.03); }
 
     @media(min-width:769px){
-      .nav-dropdown{ top:68px; right:4rem; }
+      .nav-dropdown{ top:100%; right:1rem; }
     }
 
     .navbar a{
@@ -569,43 +570,6 @@
       transition:background 0.4s ease, transform 0.4s ease;
     }
 
-    /* Mini sticky navigation */
-    .mini-nav{
-      position:fixed;
-      right:20px;
-      top:50%;
-      transform:translateY(-50%);
-      background:rgba(7,17,30,0.6);
-      border:1px solid rgba(255,255,255,0.06);
-      padding:10px 8px;
-      border-radius:12px;
-      z-index:2000;
-      backdrop-filter:blur(6px);
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .mini-nav a{
-      color:#cfeffa;
-      text-decoration:none;
-      font-size:0.9rem;
-      padding:6px 10px;
-      border-radius:8px;
-      display:block;
-      opacity:0.9;
-    }
-
-    .mini-nav a.active{
-      background:linear-gradient(90deg,var(--accent),#53d8ff);
-      color:#001018;
-      font-weight:700;
-      box-shadow:0 8px 20px rgba(0,166,255,0.12);
-    }
-
-    @media(max-width:900px){
-      .mini-nav{ display:none; }
-    }
 
     .gallery-section h2{
       font-size:4rem;
@@ -665,7 +629,7 @@
   </style>
 </head>
 
-<body>
+<body id="top">
 
   <div id="progress-bar"></div>
   <script>
@@ -700,16 +664,9 @@
   </script>
   <nav class="navbar" aria-label="Main Navigation">
 
-    <a href="#" class="logo">
+    <a href="#top" class="logo">
       <img src="img/intel-header-logo.svg" alt="Intel Logo" class="nav-logo">
     </a>
-
-    <ul>
-      <li><a href="#timeline">Timeline</a></li>
-      <li><a href="#stats">Stats</a></li>
-      <li><a href="#goals">Goals</a></li>
-      <li><a href="#gallery">Innovation</a></li>
-    </ul>
 
     <div style="display:flex; align-items:center; gap:12px; margin-left:auto;">
       <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="navDropdown" aria-label="Open navigation">
@@ -718,15 +675,16 @@
       </button>
     </div>
 
-  </nav>
+    <div id="navDropdown" class="nav-dropdown" role="menu" aria-hidden="true">
+      <a href="#top" role="menuitem">Home</a>
+      <a href="#stats" role="menuitem">Stats</a>
+      <a href="#timeline" role="menuitem">Timeline</a>
+      <a href="#goals" role="menuitem">Goals</a>
+      <a href="#gallery" role="menuitem">Innovation</a>
+      <a href="#newsletter" role="menuitem">Newsletter</a>
+    </div>
 
-  <div id="navDropdown" class="nav-dropdown" role="menu" aria-hidden="true">
-    <a href="#timeline" role="menuitem">Timeline</a>
-    <a href="#stats" role="menuitem">Stats</a>
-    <a href="#goals" role="menuitem">Goals</a>
-    <a href="#gallery" role="menuitem">Innovation</a>
-    <a href="#newsletter" role="menuitem">Newsletter</a>
-  </div>
+  </nav>
 
   <header class="hero">
 
@@ -1470,15 +1428,6 @@
 
 </footer>
 
-<!-- Mini sticky navigation -->
-<nav class="mini-nav" aria-label="Section quick navigation">
-  <a href="#timeline" data-target="timeline">Timeline</a>
-  <a href="#stats" data-target="stats">Stats</a>
-  <a href="#goals" data-target="goals">Goals</a>
-  <a href="#gallery" data-target="gallery">Innovation</a>
-  <a href="#newsletter" data-target="newsletter">Newsletter</a>
-</nav>
- 
 <!-- Detail modal (Bootstrap) -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1504,7 +1453,7 @@
  (function(){
    // Smooth scroll with offset for fixed navbar
    const OFFSET = 80;
-   const links = document.querySelectorAll('.mini-nav a, .navbar a');
+   const links = document.querySelectorAll('.nav-dropdown a, .navbar a');
 
    function scrollToId(id){
      const el = document.getElementById(id);
@@ -1574,19 +1523,16 @@
    }
 
    // Highlight active section using IntersectionObserver
-   const sectionIds = ['timeline','stats','goals','gallery','newsletter'];
+   const sectionIds = ['stats','timeline','goals','gallery','newsletter'];
    const sectionEls = sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
 
    const observer = new IntersectionObserver((entries)=>{
      entries.forEach(entry=>{
        const id = entry.target.id;
-       const miniLink = document.querySelector('.mini-nav a[data-target="'+id+'"]');
-       const navLink = document.querySelector('.navbar a[href="#'+id+'"]');
+       const navLink = document.querySelector('.navbar a[href="#'+id+'"], .nav-dropdown a[href="#'+id+'"]');
        if(entry.isIntersecting){
-         if(miniLink) miniLink.classList.add('active');
          if(navLink) navLink.classList.add('active');
        } else {
-         if(miniLink) miniLink.classList.remove('active');
          if(navLink) navLink.classList.remove('active');
        }
      });
