@@ -20,7 +20,7 @@
 >
   <title>Intel Sustainability Timeline | Innovation and Net-Zero Goals</title>
 
-  <link rel="canonical" href="https://example.com/intel-sustainability">
+  <link rel="canonical" href="https://padgetmh.github.io/Intel-Timeline">
 
   <!-- Preload LCP hero image to improve Largest Contentful Paint -->
   <link rel="preload" href="img/HERO BACKGROUND.png" as="image">
@@ -174,6 +174,12 @@
       color:white;
     }
 
+    .navbar a.active,
+    .nav-dropdown a.active{
+      color:var(--accent);
+      font-weight:700;
+    }
+
     .hero{
       height:100vh;
       position:relative;
@@ -181,10 +187,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      /* Static background image with gradient overlay */
-      background-image: 
-        linear-gradient(180deg, rgba(1,19,40,0.7), rgba(0,0,0,0.8)),
-        url('img/HERO BACKGROUND.png');
+      /* Static background using image element for better performance */
       background-size: cover;
       background-position: center;
       background-attachment: scroll;
@@ -220,8 +223,14 @@
       inset:0;
       width:100%;
       height:100%;
-      object-fit:cover;
       z-index:1;
+      display:block;
+    }
+
+    .hero-lcp img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
       display:block;
     }
 
@@ -571,6 +580,61 @@
       border-radius:30px;
     }
 
+    .initiative-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:2.5rem;
+      transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .initiative-card:hover{
+      transform:translateY(-8px);
+      border-color:rgba(0,166,255,0.35);
+      box-shadow:0 18px 40px rgba(0,166,255,0.16);
+    }
+
+    .initiative-card h3{
+      font-size:1.75rem;
+      margin-bottom:1rem;
+      display:flex;
+      align-items:center;
+      gap:0.75rem;
+    }
+
+    .initiative-card p{
+      color:#c8d3df;
+      line-height:1.9;
+      margin-bottom:1.8rem;
+    }
+
+    .initiative-card .learn-link{
+      display:inline-flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.9rem 1.5rem;
+      border-radius:999px;
+      text-decoration:none;
+      background:linear-gradient(90deg,#00a6ff,#006eff);
+      color:#ffffff;
+      font-weight:700;
+      transition:transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    }
+
+    .initiative-card .learn-link:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 26px rgba(0,166,255,0.24);
+      opacity:0.98;
+    }
+
+    .initiative-card .learn-link:active{
+      transform:translateY(0);
+    }
+
     .gallery-section{
       padding:7rem 5%;
       background:linear-gradient(180deg, rgba(2,6,15,0.4), transparent);
@@ -695,6 +759,7 @@
       <a href="#timeline" role="menuitem">Timeline</a>
       <a href="#goals" role="menuitem">Goals</a>
       <a href="#gallery" role="menuitem">Innovation</a>
+      <a href="#faq" role="menuitem">FAQ</a>
       <a href="#newsletter" role="menuitem">Newsletter</a>
     </div>
 
@@ -711,16 +776,18 @@
 
     <div class="hero-overlay"></div>
 
-    <img
-      src="img/HERO BACKGROUND.png"
-      class="hero-lcp"
-      alt=""
-      aria-hidden="true"
-      fetchpriority="high"
-      decoding="async"
-      width="1920"
-      height="1080"
-    />
+    <picture class="hero-lcp" aria-hidden="true">
+      <source media="(max-width: 768px)" srcset="img/HERO BACKGROUND.png" />
+      <source media="(min-width: 769px)" srcset="img/HERO BACKGROUND.png" />
+      <img
+        src="img/HERO BACKGROUND.png"
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+        width="1920"
+        height="1080"
+      />
+    </picture>
 
     <div class="hero-content">
 
@@ -1111,12 +1178,13 @@
     <div class="goal-image">
       <img
         src="img/Commitment to the future.png"
-        alt="Commitment to the future"
+        alt="Intel sustainability and climate innovation initiatives"
         loading="lazy"
       />
     </div>
 
   </section>
+
 
 <section class="container py-5">
 
@@ -1140,13 +1208,14 @@
           facilities and operations.
         </p>
 
-        <button
-  type="button"
+        <a
+  href="#newsletter"
   class="learn-link"
   aria-label="Learn more about renewable energy"
 >
-  Learn More →
-</button>
+  Learn More
+  <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+</a>
       </div>
     </div>
 
@@ -1163,13 +1232,14 @@
           environmental impact.
         </p>
 
-        <button
-  type="button"
+        <a
+  href="#newsletter"
   class="learn-link"
-  aria-label="Learn more about renewable energy"
+  aria-label="Learn more about water conservation"
 >
-  Learn More →
-</button>
+  Learn More
+  <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+</a>
       </div>
     </div>
 
@@ -1186,13 +1256,14 @@
           digital future.
         </p>
 
-        <button
-  type="button"
+        <a
+  href="#newsletter"
   class="learn-link"
-  aria-label="Learn more about renewable energy"
+  aria-label="Learn more about sustainable innovation"
 >
-  Learn More →
-</button>
+  Learn More
+  <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+</a>
       </div>
     </div>
 
@@ -1237,7 +1308,7 @@
     
 </section>
     
-<section class="container py-5">
+<section class="container py-5" id="faq">
 
   <div class="text-center mb-5">
     <h2>Frequently Asked Questions</h2>
