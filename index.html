@@ -1,11 +1,26 @@
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta
+  name="description"
+  content="Explore Intel's sustainability journey, renewable energy initiatives, and commitment to achieving net-zero greenhouse gas emissions by 2040."
+>
 
-  <title>Intel Sustainability Timeline</title>
+<meta
+  name="keywords"
+  content="Intel, Sustainability, Renewable Energy, Net Zero, Green Technology, Innovation"
+>
+
+<meta
+  name="author"
+  content="Micaiah Padgett"
+>
+  <title>Intel Sustainability Timeline | Innovation and Net-Zero Goals</title>
+
+  <link rel="canonical" href="https://example.com/intel-sustainability">
 
   <!-- FONT -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,11 +28,20 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+>
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Bootstrap Icons -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+>
 
+  <!-- Removed unused GSAP to improve performance -->
+  
   <style>
 
     *{
@@ -92,6 +116,53 @@
       display:flex;
       gap:2rem;
       list-style:none;
+    }
+
+    /* Header dropdown toggle */
+    .nav-toggle{
+      background:transparent;
+      border:none;
+      color:var(--text);
+      font-size:1.25rem;
+      padding:8px;
+      border-radius:8px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+
+    .nav-dropdown{
+      position:fixed;
+      right:20px;
+      top:76px;
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:8px;
+      border-radius:12px;
+      z-index:3000;
+      min-width:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+      display:none;
+    }
+
+    .nav-dropdown.open{ display:block; }
+
+    .nav-dropdown a{
+      display:block;
+      color:var(--text);
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:8px;
+      margin:2px 0;
+      font-weight:600;
+      opacity:0.95;
+    }
+
+    .nav-dropdown a:hover{ background:rgba(255,255,255,0.03); }
+
+    @media(min-width:769px){
+      .nav-dropdown{ top:68px; right:4rem; }
     }
 
     .navbar a{
@@ -230,6 +301,7 @@
       display:flex;
       gap:2rem;
       overflow-x:auto;
+      scroll-snap-type:x mandatory;
       padding-bottom:2rem;
     }
 
@@ -243,6 +315,7 @@
       /* Make cards interactive with smooth transitions */
       transition:all 0.4s ease;
       cursor:pointer;
+      scroll-snap-align:start;
     }
 
     /* Hover effect: lift the card and add glow */
@@ -485,6 +558,53 @@
 
     .gallery-section{
       padding:7rem 5%;
+      background:linear-gradient(180deg, rgba(2,6,15,0.4), transparent);
+    }
+
+    /* Better section flow */
+    section{
+      padding-top:6.5rem; /* account for fixed navbar */
+      padding-bottom:6rem;
+      scroll-margin-top:90px;
+      transition:background 0.4s ease, transform 0.4s ease;
+    }
+
+    /* Mini sticky navigation */
+    .mini-nav{
+      position:fixed;
+      right:20px;
+      top:50%;
+      transform:translateY(-50%);
+      background:rgba(7,17,30,0.6);
+      border:1px solid rgba(255,255,255,0.06);
+      padding:10px 8px;
+      border-radius:12px;
+      z-index:2000;
+      backdrop-filter:blur(6px);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .mini-nav a{
+      color:#cfeffa;
+      text-decoration:none;
+      font-size:0.9rem;
+      padding:6px 10px;
+      border-radius:8px;
+      display:block;
+      opacity:0.9;
+    }
+
+    .mini-nav a.active{
+      background:linear-gradient(90deg,var(--accent),#53d8ff);
+      color:#001018;
+      font-weight:700;
+      box-shadow:0 8px 20px rgba(0,166,255,0.12);
+    }
+
+    @media(max-width:900px){
+      .mini-nav{ display:none; }
     }
 
     .gallery-section h2{
@@ -509,7 +629,7 @@
     footer{
       padding:3rem;
       text-align:center;
-      color:#9fb0c5;
+      color:#d6dce5;
     }
 
     @media(max-width:768px){
@@ -548,8 +668,37 @@
 <body>
 
   <div id="progress-bar"></div>
+  <script>
+  (function(){
+    const rtlLanguages = ["ar","he","fa","ur"];
 
-  <nav class="navbar">
+    function updateDirection(){
+      const currentLang = document.documentElement.lang || document.body.lang || navigator.language || "en";
+      const langCode = currentLang.substring(0,2).toLowerCase();
+
+      if(rtlLanguages.includes(langCode)){
+        document.documentElement.setAttribute("dir","rtl");
+        document.body.classList.add("rtl-mode");
+        console.log("RTL mode enabled:", langCode);
+      } else {
+        document.documentElement.setAttribute("dir","ltr");
+        document.body.classList.remove("rtl-mode");
+        console.log("LTR mode enabled:", langCode);
+      }
+    }
+
+    // Initial check
+    updateDirection();
+
+    // Observe lang attribute changes (e.g., Google Translate)
+    const observer = new MutationObserver(updateDirection);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+
+    // Backup periodic check
+    setInterval(updateDirection, 2000);
+  })();
+  </script>
+  <nav class="navbar" aria-label="Main Navigation">
 
     <a href="#" class="logo">
       <img src="img/intel-header-logo.svg" alt="Intel Logo" class="nav-logo">
@@ -562,7 +711,22 @@
       <li><a href="#gallery">Innovation</a></li>
     </ul>
 
+    <div style="display:flex; align-items:center; gap:12px; margin-left:auto;">
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="navDropdown" aria-label="Open navigation">
+        <i class="bi bi-list" aria-hidden="true"></i>
+        <span class="visually-hidden">Open navigation</span>
+      </button>
+    </div>
+
   </nav>
+
+  <div id="navDropdown" class="nav-dropdown" role="menu" aria-hidden="true">
+    <a href="#timeline" role="menuitem">Timeline</a>
+    <a href="#stats" role="menuitem">Stats</a>
+    <a href="#goals" role="menuitem">Goals</a>
+    <a href="#gallery" role="menuitem">Innovation</a>
+    <a href="#newsletter" role="menuitem">Newsletter</a>
+  </div>
 
   <header class="hero">
 
@@ -646,8 +810,9 @@
 
         <img
           src="img/Intel Founded.png"
-          alt="Intel Founded"
+          alt="1968 — Intel founded by Robert Noyce and Gordon Moore (archival photo)"
           data-image="1968"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -658,7 +823,12 @@
             Robert Noyce and Gordon Moore founded Intel Corporation.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+            class="learn-more"
+            aria-label="Learn more about Intel Founded"
+          >
+            Learn More
+          </button>
 
         </div>
 
@@ -670,8 +840,9 @@
 
         <img
           src="img/First Microprocessor.png"
-          alt="First Microprocessor"
+          alt="1971 — Intel introduces the world's first commercial microprocessor"
           data-image="1971"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -682,8 +853,12 @@
             Intel introduced the world’s first commercial microprocessor.
           </p>
 
-          <button class="learn-more">Learn More</button>
-
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
         </div>
 
       </article>
@@ -694,8 +869,9 @@
 
         <img 
           src="img/8086 Processor.png"
-          alt="8086 Processor"
+          alt="1978 — Intel launches the 8086 processor and x86 architecture"
           data-image="1978"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -706,7 +882,12 @@
             Intel launched the x86 architecture that powers modern computing.
           </p>
 
-          <button class="learn-more">Learn More</button>
+         <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -718,8 +899,9 @@
 
         <img
           src="img/386 Processor Era.png"
-          alt="386 Processor Era"
+          alt="1985 — The 386 processor era, significant PC performance milestone"
           data-image="1985"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -730,7 +912,12 @@
             Intel introduced the 386 processor, revolutionizing PC performance.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -742,8 +929,9 @@
 
         <img
           src="img/Pentium Launch.png"
-          alt="Pentium Launch"
+          alt="1993 — Pentium processor launch (iconic Intel innovation)"
           data-image="1993"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -754,7 +942,12 @@
             The Pentium processor became one of Intel’s most iconic innovations.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -766,8 +959,9 @@
 
         <img
           src="img/Energy Efficiency Focus.png"
-          alt="Energy Efficiency Focus"
+          alt="2006 — Intel focuses on energy efficiency in processors and manufacturing"
           data-image="2006"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -778,7 +972,12 @@
             Intel accelerated efforts toward energy-efficient processors and greener manufacturing.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -790,8 +989,9 @@
 
         <img
           src="img/Rise Strategy.png"
-          alt="RISE Strategy"
+          alt="2020 — Intel announces RISE sustainability strategy"
           data-image="2020"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -802,7 +1002,12 @@
             Intel expanded sustainability and environmental commitments worldwide.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -814,8 +1019,9 @@
 
         <img
           src="img/9615e040-812a-4d50-b7f8-79015300075f.png"
-          alt="99% Renewable Electricity"
+          alt="2023 — Intel achieves 99% renewable electricity across operations"
           data-image="2023"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -826,7 +1032,12 @@
             Intel achieved 99% renewable electricity usage across global operations.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -838,8 +1049,9 @@
 
         <img
           src="img/Net Zero Vision.png"
-          alt="2040 Net-Zero Vision"
+          alt="2040 — Intel's net-zero greenhouse gas emissions vision (future)"
           data-image="2040"
+          loading="lazy"
         >
 
         <div class="card-content">
@@ -850,7 +1062,12 @@
             Intel aims to achieve net-zero greenhouse gas emissions globally by 2040.
           </p>
 
-          <button class="learn-more">Learn More</button>
+          <button
+  class="learn-more"
+  aria-label="Learn more about Intel sustainability milestone"
+>
+  Learn More
+</button>
 
         </div>
 
@@ -858,6 +1075,34 @@
 
     </div>
 
+  </section>
+
+  <section class="container py-5" id="timeline-highlights">
+    <div class="section-header">
+      <h2>Timeline Highlights</h2>
+      <p>Key themes from Intel’s sustainability journey, arranged in a responsive grid.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="p-4 rounded-4" style="background:var(--card); border:1px solid var(--border);">
+          <h3 class="h4">Sustainable Innovation</h3>
+          <p>From early chip breakthroughs to energy-efficient manufacturing, Intel continues innovating with purpose.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="p-4 rounded-4" style="background:var(--card); border:1px solid var(--border);">
+          <h3 class="h4">Renewable Progress</h3>
+          <p>Recent milestones highlight Intel’s progress toward renewable electricity and greenhouse gas reduction goals.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="p-4 rounded-4" style="background:var(--card); border:1px solid var(--border);">
+          <h3 class="h4">Future Vision</h3>
+          <p>The 2040 net-zero ambition points toward a future-ready timeline built around climate action.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
     <section class="goals-section" id="goals">
@@ -884,57 +1129,509 @@
       <img
         src="img/Commitment to the future.png"
         alt="Commitment to the future"
+        loading="lazy"
       />
     </div>
 
   </section>
 
+<section class="container py-5">
+
+  <div class="text-center mb-5">
+    <h2>Intel Sustainability Initiatives</h2>
+    <p>Building a smarter and greener future through innovation.</p>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Column 1 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="initiative-card h-100">
+        <h3>
+          <i class="bi bi-lightning-charge-fill"></i>
+          Renewable Energy
+        </h3>
+
+        <p>
+          Intel continues expanding renewable electricity usage across global
+          facilities and operations.
+        </p>
+
+        <button
+  type="button"
+  class="learn-link"
+  aria-label="Learn more about renewable energy"
+>
+  Learn More →
+</button>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="initiative-card h-100">
+        <h3>
+          <i class="bi bi-droplet-fill"></i>
+          Water Conservation
+        </h3>
+
+        <p>
+          Advanced water restoration and conservation projects help reduce
+          environmental impact.
+        </p>
+
+        <button
+  type="button"
+  class="learn-link"
+  aria-label="Learn more about renewable energy"
+>
+  Learn More →
+</button>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-lg-4">
+      <div class="initiative-card h-100">
+        <h3>
+          <i class="bi bi-cpu-fill"></i>
+          Sustainable Innovation
+        </h3>
+
+        <p>
+          Intel develops efficient technologies that support a more sustainable
+          digital future.
+        </p>
+
+        <button
+  type="button"
+  class="learn-link"
+  aria-label="Learn more about renewable energy"
+>
+  Learn More →
+</button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
   <!-- INNOVATION SECTION ADDED BACK -->    
 <section class="gallery-section" id="gallery">      
 <h2>Innovation Gallery</h2>      
-<div class="gallery-grid">        
-<img
-         
-src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 1"
-       
->        
-<img
-         
-src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 2"
-       
->        
-<img         
-src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 3"
-       
->        
-<img         
-src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 4"
-       
->        
-<img         
-src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 5"
-       
->       
-<img         
-src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=1200&auto=format&fit=crop"         
-alt="Innovation 6"
-       
->      
+<div class="gallery-grid">
+        <img
+          src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — data center research and sustainability"
+          loading="lazy"
+        >
+        <img
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — energy-efficient hardware design"
+          loading="lazy"
+        >
+        <img
+          src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — AI for sustainability"
+          loading="lazy"
+        >
+        <img
+          src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — advanced semiconductor fabrication"
+          loading="lazy"
+        >
+        <img
+          src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — sustainable infrastructure"
+          loading="lazy"
+        >
+        <img
+          src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=1200&auto=format&fit=crop"
+          alt="Innovation concept — collaborative research and development"
+          loading="lazy"
+        >
 </div>
     
 </section>
     
-<footer>
-     
-© 2025 Intel Sustainability Experience — Designed for Innovation & Future Technology.
-   
+<section class="container py-5">
+
+  <div class="text-center mb-5">
+    <h2>Frequently Asked Questions</h2>
+    <p>
+      Learn more about Intel's sustainability efforts.
+    </p>
+  </div>
+
+  <div class="accordion" id="sustainabilityAccordion">
+
+    <div class="accordion-item">
+
+      <h2 class="accordion-header">
+
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#faqOne"
+          aria-expanded="true">
+
+          What is Intel's 2040 Goal?
+
+        </button>
+
+      </h2>
+
+      <div
+        id="faqOne"
+        class="accordion-collapse collapse show"
+        data-bs-parent="#sustainabilityAccordion">
+
+        <div class="accordion-body">
+          Intel aims to achieve net-zero greenhouse gas
+          emissions in its global operations by 2040.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+      <h2 class="accordion-header">
+
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#faqTwo">
+
+          How does Intel use renewable energy?
+
+        </button>
+
+      </h2>
+
+      <div
+        id="faqTwo"
+        class="accordion-collapse collapse"
+        data-bs-parent="#sustainabilityAccordion">
+
+        <div class="accordion-body">
+          Intel powers most global operations using renewable
+          electricity and continues investing in clean energy.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+      <h2 class="accordion-header">
+
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#faqThree">
+
+          Why is water conservation important?
+
+        </button>
+
+      </h2>
+
+      <div
+        id="faqThree"
+        class="accordion-collapse collapse"
+        data-bs-parent="#sustainabilityAccordion">
+
+        <div class="accordion-body">
+          Water conservation reduces environmental impact and
+          supports sustainable semiconductor manufacturing.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="container py-5" id="newsletter">
+
+  <div class="row justify-content-center">
+
+    <div class="col-lg-6">
+
+      <div class="newsletter-card">
+
+        <h2 class="text-center mb-3">
+          Subscribe to Our Sustainability Newsletter
+        </h2>
+
+        <p class="text-center mb-4">
+          Stay informed about Intel's latest sustainability goals,
+          environmental initiatives, and innovation updates.
+        </p>
+
+        <form>
+
+          <div class="mb-3">
+            <label for="fullName" class="form-label">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="fullName"
+              placeholder="Enter your full name"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label for="emailAddress" class="form-label">
+              Email Address
+            </label>
+
+            <input
+              type="email"
+              class="form-control"
+              id="emailAddress"
+              placeholder="Enter your email"
+              aria-describedby="emailHelp"
+              required
+            >
+
+            <div id="emailHelp" class="form-text">
+              We'll only use your email for newsletter updates.
+            </div>
+
+          </div>
+
+          <div class="form-check mb-4">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="consent"
+              required
+            >
+
+            <label class="form-check-label" for="consent">
+              I agree to receive sustainability updates from Intel.
+            </label>
+
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+          >
+            Subscribe
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<footer class="footer-section">
+
+  <div class="container text-center">
+
+    <p>
+      © 2026 Intel Sustainability Experience.
+      All Rights Reserved.
+    </p>
+
+    <nav aria-label="Footer Navigation">
+
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+
+      <a href="#">Terms of Use</a>
+      <span>|</span>
+
+      <a href="#">Contact</a>
+
+    </nav>
+
+  </div>
+
 </footer>
-  
-</body>
+
+<!-- Mini sticky navigation -->
+<nav class="mini-nav" aria-label="Section quick navigation">
+  <a href="#timeline" data-target="timeline">Timeline</a>
+  <a href="#stats" data-target="stats">Stats</a>
+  <a href="#goals" data-target="goals">Goals</a>
+  <a href="#gallery" data-target="gallery">Innovation</a>
+  <a href="#newsletter" data-target="newsletter">Newsletter</a>
+</nav>
  
-</html>  
+<!-- Detail modal (Bootstrap) -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="background:var(--card); color:var(--text); border:1px solid var(--border);">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="detailModalImage" style="width:100%; height:300px; background-size:cover; background-position:center; border-radius:12px; margin-bottom:1rem;"></div>
+        <p id="detailModalDesc"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+ (function(){
+   // Smooth scroll with offset for fixed navbar
+   const OFFSET = 80;
+   const links = document.querySelectorAll('.mini-nav a, .navbar a');
+
+   function scrollToId(id){
+     const el = document.getElementById(id);
+     if(!el) return;
+     const top = el.getBoundingClientRect().top + window.pageYOffset - OFFSET;
+     window.scrollTo({ top, behavior: 'smooth' });
+   }
+
+   links.forEach(a=>{
+     const href = a.getAttribute('href') || '';
+     if(href.startsWith('#')){
+       a.addEventListener('click', function(e){
+         e.preventDefault();
+         const id = (this.getAttribute('data-target') || href.substring(1));
+         scrollToId(id);
+       });
+     }
+   });
+
+   // Nav dropdown toggle
+   const navToggle = document.getElementById('navToggle');
+   const navDropdown = document.getElementById('navDropdown');
+   if(navToggle && navDropdown){
+     navToggle.addEventListener('click', (ev)=>{
+       const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+       navToggle.setAttribute('aria-expanded', String(!expanded));
+       navDropdown.classList.toggle('open');
+       navDropdown.setAttribute('aria-hidden', String(expanded));
+     });
+
+     // Dismiss when clicking outside
+     document.addEventListener('click',(e)=>{
+       if(!navDropdown.contains(e.target) && !navToggle.contains(e.target)){
+         navDropdown.classList.remove('open');
+         navDropdown.setAttribute('aria-hidden','true');
+         navToggle.setAttribute('aria-expanded','false');
+       }
+     });
+
+     // Dismiss with Escape
+     document.addEventListener('keydown',(e)=>{
+       if(e.key === 'Escape'){
+         navDropdown.classList.remove('open');
+         navDropdown.setAttribute('aria-hidden','true');
+         navToggle.setAttribute('aria-expanded','false');
+       }
+     });
+
+     // Close dropdown on scroll
+     window.addEventListener('scroll', ()=>{
+       navDropdown.classList.remove('open');
+       navDropdown.setAttribute('aria-hidden','true');
+       navToggle.setAttribute('aria-expanded','false');
+     }, { passive: true });
+
+     // Make dropdown links smooth-scroll and close the menu
+     navDropdown.querySelectorAll('a').forEach(a=>{
+       a.addEventListener('click', function(e){
+         e.preventDefault();
+         const id = this.getAttribute('href').substring(1);
+         scrollToId(id);
+         navDropdown.classList.remove('open');
+         navDropdown.setAttribute('aria-hidden','true');
+         navToggle.setAttribute('aria-expanded','false');
+       });
+     });
+   }
+
+   // Highlight active section using IntersectionObserver
+   const sectionIds = ['timeline','stats','goals','gallery','newsletter'];
+   const sectionEls = sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
+
+   const observer = new IntersectionObserver((entries)=>{
+     entries.forEach(entry=>{
+       const id = entry.target.id;
+       const miniLink = document.querySelector('.mini-nav a[data-target="'+id+'"]');
+       const navLink = document.querySelector('.navbar a[href="#'+id+'"]');
+       if(entry.isIntersecting){
+         if(miniLink) miniLink.classList.add('active');
+         if(navLink) navLink.classList.add('active');
+       } else {
+         if(miniLink) miniLink.classList.remove('active');
+         if(navLink) navLink.classList.remove('active');
+       }
+     });
+   },{ root: null, rootMargin: '0px 0px -60% 0px', threshold: 0 });
+
+   sectionEls.forEach(el=>observer.observe(el));
+
+  // Learn More buttons: populate modal
+  const modalEl = document.getElementById('detailModal');
+  const modalTitle = document.getElementById('detailModalLabel');
+  const modalDesc = document.getElementById('detailModalDesc');
+  const modalImage = document.getElementById('detailModalImage');
+
+  document.querySelectorAll('.learn-more').forEach(btn=>{
+    btn.setAttribute('type','button');
+    btn.addEventListener('click', function(e){
+      // find nearest card content
+      const card = this.closest('.timeline-card') || this.closest('.initiative-card') || this.closest('.card');
+      let title = '';
+      let desc = '';
+      let imgUrl = '';
+      if(card){
+        const h3 = card.querySelector('h3') || card.querySelector('h2');
+        const p = card.querySelector('p');
+        const img = card.querySelector('img');
+        title = h3 ? h3.textContent.trim() : '';
+        desc = p ? p.textContent.trim() : '';
+        if(img){
+          imgUrl = img.src || img.getAttribute('data-src') || '';
+        }
+      }
+
+      modalTitle.textContent = title || 'Details';
+      modalDesc.textContent = desc || 'More information coming soon.';
+      if(imgUrl){
+        modalImage.style.backgroundImage = `url('${imgUrl}')`;
+        modalImage.style.display = 'block';
+      } else {
+        modalImage.style.display = 'none';
+      }
+
+      const bsModal = new bootstrap.Modal(modalEl);
+      bsModal.show();
+    });
+  });
+
+ })();
+ </script>
